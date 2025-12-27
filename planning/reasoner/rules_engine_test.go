@@ -4,7 +4,7 @@ import "testing"
 
 func TestEvaluateRules_Match(t *testing.T) {
 	signals := map[string]float64{
-		"REGIME_SHIFT":            0.8,
+		"REGIME_SHIFT":             0.8,
 		"PROBABILITY_ACCELERATION": 0.7,
 	}
 

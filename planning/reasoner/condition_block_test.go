@@ -4,7 +4,7 @@ import "testing"
 
 func TestEvaluateConditionBlock_AllTrue(t *testing.T) {
 	signals := map[string]float64{
-		"REGIME_SHIFT":            0.8,
+		"REGIME_SHIFT":             0.8,
 		"PROBABILITY_ACCELERATION": 0.7,
 	}
 
@@ -23,7 +23,7 @@ func TestEvaluateConditionBlock_AllTrue(t *testing.T) {
 
 func TestEvaluateConditionBlock_AllFalse(t *testing.T) {
 	signals := map[string]float64{
-		"REGIME_SHIFT":            0.8,
+		"REGIME_SHIFT":             0.8,
 		"PROBABILITY_ACCELERATION": 0.4,
 	}
 

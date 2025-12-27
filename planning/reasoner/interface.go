@@ -14,4 +14,3 @@ type SignalInput struct {
 	SignalID string
 	Value    float64
 }
-

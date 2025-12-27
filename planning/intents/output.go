@@ -5,10 +5,10 @@ import "time"
 // IntentOutput is the canonical response produced by the Planning Layer.
 // It is intentionally generic: "evaluation" is a free-form map for intent-specific metrics.
 type IntentOutput struct {
-	Meta       Meta          `json:"meta"`
-	Status     IntentStatus  `json:"status"`
-	Confidence float64       `json:"confidence"` // 0..1
-	Summary    string        `json:"summary"`
+	Meta       Meta         `json:"meta"`
+	Status     IntentStatus `json:"status"`
+	Confidence float64      `json:"confidence"` // 0..1
+	Summary    string       `json:"summary"`
 
 	Signals   []SignalUsage `json:"signals"`
 	Reasoning Reasoning     `json:"reasoning"`
@@ -30,11 +30,11 @@ type Meta struct {
 type IntentStatus string
 
 const (
-	StatusNotTriggered  IntentStatus = "not_triggered"
-	StatusLowConfidence IntentStatus = "low_confidence"
-	StatusWeakSignal    IntentStatus = "weak_signal"
+	StatusNotTriggered   IntentStatus = "not_triggered"
+	StatusLowConfidence  IntentStatus = "low_confidence"
+	StatusWeakSignal     IntentStatus = "weak_signal"
 	StatusModerateSignal IntentStatus = "moderate_signal"
-	StatusStrongSignal  IntentStatus = "strong_signal"
+	StatusStrongSignal   IntentStatus = "strong_signal"
 )
 
 type SignalUsage struct {
