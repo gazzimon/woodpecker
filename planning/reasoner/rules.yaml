@@ -1,32 +1,88 @@
 version: v1
+ruleset_id: regime_state_v1
 
 rules:
-  - id: regime_shift_strong
+
+  # ─────────────────────────────────────────────
+  # STRONG REGIME SHIFT
+  # ─────────────────────────────────────────────
+  - id: regime_shift_confirmed
     intent: interpret.regime_state
     when:
       all:
         - signal: REGIME_SHIFT
           op: gte
-          value: 0.7
+          value: 0.75
         - signal: PROBABILITY_ACCELERATION
           op: gte
-          value: 0.6
+          value: 0.65
+        - signal: CONVICTION_SPIKE
+          op: gte
+          value: 0.60
     then:
       status: strong_signal
-      confidence_boost: 0.2
+      confidence_boost: 0.45
     explanation: >
-      Sustained regime shift signal combined with accelerating probabilities
-      indicates a strong structural change in expectations.
+      A confirmed regime shift is detected. Structural expectations are changing,
+      supported by accelerating probabilities and concentrated conviction.
+      This configuration historically precedes macro inflection points.
 
-  - id: regime_shift_weak
+  # ─────────────────────────────────────────────
+  # MODERATE REGIME SHIFT
+  # ─────────────────────────────────────────────
+  - id: regime_shift_moderate
     intent: interpret.regime_state
     when:
       all:
         - signal: REGIME_SHIFT
           op: gte
-          value: 0.5
+          value: 0.65
+        - signal: PROBABILITY_ACCELERATION
+          op: gte
+          value: 0.55
+    then:
+      status: moderate_signal
+      confidence_boost: 0.30
+    explanation: >
+      A moderate regime transition is forming. Expectations are shifting and
+      probabilities are accelerating, but conviction is not yet concentrated.
+      This suggests an emerging, but not fully confirmed, regime change.
+
+  # ─────────────────────────────────────────────
+  # WEAK / EARLY REGIME SIGNAL
+  # ─────────────────────────────────────────────
+  - id: regime_shift_early
+    intent: interpret.regime_state
+    when:
+      all:
+        - signal: REGIME_SHIFT
+          op: gte
+          value: 0.50
     then:
       status: weak_signal
-      confidence_boost: 0.1
+      confidence_boost: 0.15
     explanation: >
-      Early indications of a possible regime shift detected.
+      Early indications of a possible regime shift are present. Structural
+      expectations are beginning to move, but confirmation signals are weak.
+      This state represents an early warning, not an actionable regime change.
+
+  # ─────────────────────────────────────────────
+  # FALSE MOVE / LOW CONVICTION
+  # ─────────────────────────────────────────────
+  - id: regime_false_move
+    intent: interpret.regime_state
+    when:
+      all:
+        - signal: REGIME_SHIFT
+          op: gte
+          value: 0.60
+        - signal: CONVICTION_SPIKE
+          op: lt
+          value: 0.40
+    then:
+      status: low_confidence
+      confidence_boost: 0.05
+    explanation: >
+      Apparent regime movement without supporting conviction. This pattern
+      often corresponds to speculative or noisy shifts that fail to persist.
+      Caution is advised, as follow-through is historically weak.

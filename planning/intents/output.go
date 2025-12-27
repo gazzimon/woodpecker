@@ -5,35 +5,37 @@ import "time"
 // IntentOutput is the canonical response produced by the Planning Layer.
 // It is intentionally generic: "evaluation" is a free-form map for intent-specific metrics.
 type IntentOutput struct {
-	Meta      Meta                 `json:"meta"`
-	Status    IntentStatus         `json:"status"`
-	Confidence float64             `json:"confidence"` // 0..1
-	Summary   string               `json:"summary"`
+	Meta       Meta          `json:"meta"`
+	Status     IntentStatus  `json:"status"`
+	Confidence float64       `json:"confidence"` // 0..1
+	Summary    string        `json:"summary"`
 
-	Signals   []SignalUsage        `json:"signals"`
-	Reasoning Reasoning            `json:"reasoning"`
+	Signals   []SignalUsage `json:"signals"`
+	Reasoning Reasoning     `json:"reasoning"`
 
 	// Evaluation is intent-specific metrics (JSON Schema: additionalProperties=true)
 	// Examples: spread_pct, convergence_prob, liquidity_score, edge_estimate, etc.
-	Evaluation map[string]any      `json:"evaluation,omitempty"`
+	Evaluation map[string]any `json:"evaluation,omitempty"`
 
-	Guardrails *Guardrails         `json:"guardrails,omitempty"`
+	Guardrails *Guardrails `json:"guardrails,omitempty"`
 }
 
 type Meta struct {
-	IntentID   string    `json:"intent_id"`
-	Timestamp  time.Time `json:"timestamp"`
-	Version    string    `json:"version"`
+	IntentID  string    `json:"intent_id"`
+	Timestamp time.Time `json:"timestamp"`
+	Version   string    `json:"version"`
 }
 
 // IntentStatus matches the JSON Schema enum:
-// ["not_triggered", "weak_signal", "strong_signal"]
+// ["not_triggered", "weak_signal", "moderate_signal", "strong_signal", "low_confidence"]
 type IntentStatus string
 
 const (
-	StatusNotTriggered IntentStatus = "not_triggered"
-	StatusWeakSignal   IntentStatus = "weak_signal"
-	StatusStrongSignal IntentStatus = "strong_signal"
+	StatusNotTriggered  IntentStatus = "not_triggered"
+	StatusWeakSignal    IntentStatus = "weak_signal"
+	StatusModerateSignal IntentStatus = "moderate_signal"
+	StatusStrongSignal  IntentStatus = "strong_signal"
+	StatusLowConfidence IntentStatus = "low_confidence"
 )
 
 type SignalUsage struct {

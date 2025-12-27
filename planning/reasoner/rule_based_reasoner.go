@@ -1,6 +1,7 @@
 package reasoner
 
 import (
+	"sort"
 	"time"
 
 	"woodpecker/planning/intents"
@@ -17,19 +18,34 @@ func (r *RuleBasedReasoner) Evaluate(
 	signals []SignalInput,
 ) (intents.IntentOutput, error) {
 
+	// 1️⃣ Normalizar señales
 	signalMap := make(map[string]float64)
 	for _, s := range signals {
 		signalMap[s.SignalID] = s.Value
 	}
 
-	matchedRules, _ := EvaluateRules(intentID, signalMap, r.Rules)
+	// 2️⃣ Evaluar reglas
+	matchedRules, err := EvaluateRules(intentID, signalMap, r.Rules)
+	if err != nil {
+		return intents.IntentOutput{}, err
+	}
+
+	// 3️⃣ Resolver precedencia (priority DESC)
+	sort.Slice(matchedRules, func(i, j int) bool {
+		return matchedRules[i].Priority > matchedRules[j].Priority
+	})
 
 	status := intents.StatusNotTriggered
 	confidence := 0.0
 	reasonSteps := []intents.ReasoningStep{}
 
+	// 4️⃣ Aplicar reglas
 	for i, rule := range matchedRules {
-		status = intents.IntentStatus(rule.Then.Status)
+		// status siempre viene de la regla de mayor prioridad
+		if i == 0 {
+			status = intents.IntentStatus(rule.Then.Status)
+		}
+
 		confidence += rule.Then.ConfidenceBoost
 
 		reasonSteps = append(reasonSteps, intents.ReasoningStep{
@@ -40,6 +56,11 @@ func (r *RuleBasedReasoner) Evaluate(
 
 	if confidence > 1 {
 		confidence = 1
+	}
+
+	// 5️⃣ Fallback explícito si no matchea nada
+	if len(matchedRules) == 0 {
+		status = intents.StatusLowConfidence
 	}
 
 	return intents.IntentOutput{
@@ -54,7 +75,7 @@ func (r *RuleBasedReasoner) Evaluate(
 		Signals:    mapSignals(signals),
 		Reasoning: intents.Reasoning{
 			Logic:       reasonSteps,
-			Explanation: "One or more declarative rules matched the current signal snapshot.",
+			Explanation: "Declarative rules matched the current signal snapshot.",
 		},
 		Guardrails: &intents.Guardrails{
 			HumanConfirmationRequired: true,
@@ -63,8 +84,13 @@ func (r *RuleBasedReasoner) Evaluate(
 }
 
 func mapSignals(inputs []SignalInput) []intents.SignalUsage {
+	if len(inputs) == 0 {
+		return nil
+	}
+
 	w := 1.0 / float64(len(inputs))
 	out := make([]intents.SignalUsage, 0, len(inputs))
+
 	for _, s := range inputs {
 		out = append(out, intents.SignalUsage{
 			SignalID: s.SignalID,
