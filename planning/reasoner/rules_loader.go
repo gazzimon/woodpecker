@@ -17,5 +17,10 @@ func LoadRulesFromFile(path string) ([]Rule, error) {
 		return nil, err
 	}
 
+	// 🔒 VALIDATION STEP (fail-fast)
+	if err := ValidateRules(ruleset.Rules); err != nil {
+		return nil, err
+	}
+
 	return ruleset.Rules, nil
 }

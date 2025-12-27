@@ -14,7 +14,6 @@ type IntentOutput struct {
 	Reasoning Reasoning     `json:"reasoning"`
 
 	// Evaluation is intent-specific metrics (JSON Schema: additionalProperties=true)
-	// Examples: spread_pct, convergence_prob, liquidity_score, edge_estimate, etc.
 	Evaluation map[string]any `json:"evaluation,omitempty"`
 
 	Guardrails *Guardrails `json:"guardrails,omitempty"`
@@ -26,16 +25,16 @@ type Meta struct {
 	Version   string    `json:"version"`
 }
 
-// IntentStatus matches the JSON Schema enum:
-// ["not_triggered", "weak_signal", "moderate_signal", "strong_signal", "low_confidence"]
+// IntentStatus is the single source of truth for intent evaluation states.
+// It MUST cover all possible rule outputs.
 type IntentStatus string
 
 const (
 	StatusNotTriggered  IntentStatus = "not_triggered"
+	StatusLowConfidence IntentStatus = "low_confidence"
 	StatusWeakSignal    IntentStatus = "weak_signal"
 	StatusModerateSignal IntentStatus = "moderate_signal"
 	StatusStrongSignal  IntentStatus = "strong_signal"
-	StatusLowConfidence IntentStatus = "low_confidence"
 )
 
 type SignalUsage struct {
