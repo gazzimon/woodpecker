@@ -1,0 +1,119 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WoodpeckerIntentOutput",
+  "type": "object",
+  "required": [
+    "meta",
+    "status",
+    "confidence",
+    "summary",
+    "signals",
+    "reasoning"
+  ],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["intent_id", "timestamp", "version"],
+      "properties": {
+        "intent_id": {
+          "type": "string",
+          "description": "Evaluated intent identifier"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "version": {
+          "type": "string",
+          "description": "Schema version"
+        }
+      }
+    },
+
+    "status": {
+      "type": "string",
+      "enum": ["not_triggered", "weak_signal", "strong_signal"],
+      "description": "Logical state of the intent"
+    },
+
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Aggregated confidence score"
+    },
+
+    "summary": {
+      "type": "string",
+      "description": "Human-readable summary"
+    },
+
+    "signals": {
+      "type": "array",
+      "description": "Signals used in the evaluation",
+      "items": {
+        "type": "object",
+        "required": ["signal_id", "value", "weight"],
+        "properties": {
+          "signal_id": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        }
+      }
+    },
+
+    "reasoning": {
+      "type": "object",
+      "required": ["logic", "explanation"],
+      "properties": {
+        "logic": {
+          "type": "array",
+          "description": "Structured reasoning steps",
+          "items": {
+            "type": "object",
+            "required": ["step", "description"],
+            "properties": {
+              "step": {
+                "type": "integer"
+              },
+              "description": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "explanation": {
+          "type": "string",
+          "description": "Narrative explanation"
+        }
+      }
+    },
+
+    "evaluation": {
+      "type": "object",
+      "description": "Intent-specific metrics",
+      "additionalProperties": true
+    },
+
+    "guardrails": {
+      "type": "object",
+      "description": "Safety and execution constraints",
+      "properties": {
+        "human_confirmation_required": {
+          "type": "boolean"
+        },
+        "confidence_capped": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "interpret.regime_state": {
+    "required": [
+      "REGIME_SHIFT",
+      "PROBABILITY_ACCELERATION"
+    ],
+    "optional": [
+      "CONVICTION_SPIKE"
+    ]
+  },
+  "evaluate.opportunity": {
+    "required": [
+      "DIVERGENCE_ALERT",
+      "CONVICTION_SPIKE"
+    ],
+    "optional": [
+      "PROBABILITY_ACCELERATION"
+    ]
+  }
+}

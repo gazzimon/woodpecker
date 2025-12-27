@@ -1,0 +1,24 @@
+{
+  "intents": [
+    {
+      "id": "observe.market_state",
+      "category": "observe",
+      "description": "Assess current market expectations"
+    },
+    {
+      "id": "interpret.regime_state",
+      "category": "interpret",
+      "description": "Detect structural shifts in expectations"
+    },
+    {
+      "id": "evaluate.opportunity",
+      "category": "evaluate",
+      "description": "Evaluate asymmetric opportunities"
+    },
+    {
+      "id": "trigger.regime_change",
+      "category": "trigger",
+      "description": "Notify when a regime change is detected"
+    }
+  ]
+}

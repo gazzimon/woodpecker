@@ -1,0 +1,29 @@
+{
+  "signals": [
+    {
+      "id": "PROBABILITY_ACCELERATION",
+      "range": [0, 1],
+      "description": "Rate of change in implied probability"
+    },
+    {
+      "id": "CONVICTION_SPIKE",
+      "range": [0, 1],
+      "description": "Concentrated volume from few actors"
+    },
+    {
+      "id": "REGIME_SHIFT",
+      "range": [0, 1],
+      "description": "Structural change in expectations"
+    },
+    {
+      "id": "DIVERGENCE_ALERT",
+      "range": [0, 1],
+      "description": "Cross-market disagreement"
+    },
+    {
+      "id": "LOW_CONFIDENCE_MOVE",
+      "range": [0, 1],
+      "description": "Price move without conviction"
+    }
+  ]
+}

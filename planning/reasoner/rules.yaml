@@ -1,0 +1,32 @@
+version: v1
+
+rules:
+  - id: regime_shift_strong
+    intent: interpret.regime_state
+    when:
+      all:
+        - signal: REGIME_SHIFT
+          op: gte
+          value: 0.7
+        - signal: PROBABILITY_ACCELERATION
+          op: gte
+          value: 0.6
+    then:
+      status: strong_signal
+      confidence_boost: 0.2
+    explanation: >
+      Sustained regime shift signal combined with accelerating probabilities
+      indicates a strong structural change in expectations.
+
+  - id: regime_shift_weak
+    intent: interpret.regime_state
+    when:
+      all:
+        - signal: REGIME_SHIFT
+          op: gte
+          value: 0.5
+    then:
+      status: weak_signal
+      confidence_boost: 0.1
+    explanation: >
+      Early indications of a possible regime shift detected.
